@@ -1,3 +1,5 @@
+import 'package:address_form/models/address.dart';
+import 'package:address_form/utils/functions/print_address.dart';
 import 'package:flutter/material.dart';
 
 class AddressForm extends StatefulWidget {
@@ -59,21 +61,24 @@ class AddressFormState extends State<AddressForm> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     debugPrint('Form is valid');
-                    debugPrint(
-                        'Address Title: ${_addressTitleController.text}');
-                    debugPrint('City: ${_cityController.text}');
-                    debugPrint('City Type: ${_cityTypeController.text}');
-                    debugPrint('Country: ${_countryController.text}');
-                    debugPrint('District: ${_districtController.text}');
-                    debugPrint('Email: ${_emailController.text}');
-                    debugPrint('Full Name: ${_fullNameController.text}');
-                    debugPrint('Latitude: ${_latitudeController.text}');
-                    debugPrint('Longitude: ${_longitudeController.text}');
-                    debugPrint('Phone No: ${_phoneNoController.text}');
-                    debugPrint('Province: ${_provinceController.text}');
-                    debugPrint('Street: ${_streetController.text}');
-                    debugPrint('Tole: ${_toleController.text}');
-                    debugPrint('Ward No: ${_wardNoController.text}');
+                    printAddress(Address(
+                      addressTitle: _addressTitleController.text,
+                      city: _cityController.text,
+                      cityType: _cityTypeController.text,
+                      country: _countryController.text,
+                      district: _districtController.text,
+                      email: _emailController.text,
+                      fullName: _fullNameController.text,
+                      latitude: _latitudeController.text,
+                      longitude: _longitudeController.text,
+                      phoneNo: _phoneNoController.text,
+                      province: _provinceController.text,
+                      street: _streetController.text,
+                      tole: _toleController.text,
+                      wardNo: _wardNoController.text,
+                      createdAt: DateTime.now(),
+                      updatedAt: DateTime.now(),
+                    ));
                   }
                 },
                 child: const Text('Submit'),

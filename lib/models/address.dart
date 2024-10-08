@@ -1,5 +1,5 @@
 class Address {
-  final int id;
+  final int? id;
   final String addressTitle;
   final String city;
   final String cityType;
@@ -18,7 +18,7 @@ class Address {
   final DateTime updatedAt;
 
   Address({
-    required this.id,
+    this.id,
     required this.addressTitle,
     required this.city,
     required this.cityType,
