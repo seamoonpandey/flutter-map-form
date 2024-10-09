@@ -1,3 +1,4 @@
+import 'package:address_form/utils/functions/location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -44,107 +45,39 @@ class _MoonMapState extends State<MoonMap> {
   }
 
   Future<void> _fetchCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+    if (!await isLocationServiceEnabled()) return;
 
-    // Check if location services are enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      _showLocationServicesDialog();
-      return;
-    }
+    LocationPermission permission = await checkAndRequestLocationPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) return;
 
-    // Check for location permissions
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        _showError('Location permissions are denied.');
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      _showError('Location permissions are permanently denied.');
-      return;
-    }
-
-    // Fetch the current location
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.best,
-        ),
-      );
-
-      setState(() {
+    Position? position = await fetchCurrentPosition();
+    setState(() {
+      if (position != null) {
         longitude = position.longitude;
         latitude = position.latitude;
-        widget.onLocationChanged(LatLng(latitude, longitude));
-      });
+      }
+      widget.onLocationChanged(LatLng(latitude, longitude));
+    });
 
-      // Move the map to the current location
-      _mapController.move(LatLng(latitude, longitude), 13.0);
-    } catch (e) {
-      _showError('Failed to get current location.');
-    }
-  }
-
-  // Method to show dialog asking user to enable location services
-  void _showLocationServicesDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Location Services Disabled'),
-        content: const Text('Please enable location services to use the map.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Geolocator.openLocationSettings();
-            },
-            child: const Text('Open Settings'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-        ],
-      ),
-    );
+    _mapController.move(LatLng(latitude, longitude), 13.0);
   }
 
   void _getCurrentLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.best,
-        ),
-      );
-
-      setState(() {
+    Position? position = await fetchCurrentPosition();
+    setState(() {
+      if (position != null) {
         longitude = position.longitude;
         latitude = position.latitude;
-        widget.onLocationChanged(LatLng(latitude, longitude));
-      });
+      }
+      widget.onLocationChanged(LatLng(latitude, longitude));
+    });
 
-      _goToCurrentLocation();
-    } catch (e) {
-      _showError('Failed to get current location.');
-    }
+    _goToCurrentLocation();
   }
 
   void _goToCurrentLocation() {
     _mapController.move(LatLng(latitude, longitude), 13.0);
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 3),
-      ),
-    );
   }
 
   @override
