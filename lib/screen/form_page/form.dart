@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 class AddressForm extends StatefulWidget {
   final void Function() openMap;
+  final Map<String, String> geocodeData;
   const AddressForm({
     required this.openMap,
+    required this.geocodeData,
     super.key,
   });
 
@@ -31,6 +33,20 @@ class AddressFormState extends State<AddressForm> {
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _toleController = TextEditingController();
   final TextEditingController _wardNoController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Autofill form fields using geocode data
+    if (widget.geocodeData.isNotEmpty) {
+      _cityController.text = widget.geocodeData['city'] ?? '';
+      _countryController.text = widget.geocodeData['country'] ?? '';
+      _streetController.text = widget.geocodeData['street'] ?? '';
+      _latitudeController.text = widget.geocodeData['latitude'] ?? '';
+      _longitudeController.text = widget.geocodeData['longitude'] ?? '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

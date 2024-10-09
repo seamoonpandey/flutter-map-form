@@ -12,6 +12,9 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
+  // To store geocode data received from the map
+  Map<String, String> geocodeData = {};
+
   _showMap() {
     showDialog(
         context: context,
@@ -21,9 +24,12 @@ class _FormPageState extends State<FormPage> {
                 EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
             child: Dialog.fullscreen(
               child: MoonMap(
-                onLocationChanged: (LatLng location) {
-                  debugPrint('Location: $location');
+                onLocationChanged: (LatLng location) async {
+                  // Fetch geocode data using the location
                   decodeGeocode(location);
+                  // Close the map after selecting the location
+                  Navigator.of(context).pop();
+                  setState(() {}); // Update the form with new geocode data
                 },
               ),
             ),
@@ -42,6 +48,7 @@ class _FormPageState extends State<FormPage> {
           child: Dialog.fullscreen(
             child: AddressForm(
               openMap: _showMap,
+              geocodeData: geocodeData, // Pass the geocode data to the form
             ),
           ),
         );
