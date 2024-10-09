@@ -25,21 +25,20 @@ Future<Map<String, String>> decodeGeocode(LatLng location) async {
 }
 
 Map<String, String> mapGeocodeData(LatLng location, Map<String, dynamic> data) {
-  String road = data['address']['road'] ?? '';
-  String city = data['address']['city'] ??
-      data['address']['town'] ??
-      data['address']['village'] ??
-      'Unknown city';
-  String district = data['address']['county'] ?? 'Unknown district';
-  String province = data['address']['state'] ?? 'Unknown province';
-  String country = data['address']['country'] ?? 'Unknown country';
-  String postalCode = data['address']['postcode'] ?? 'Unknown postal code';
+  final address = data['address'] ?? {};
+
+  String road = address['road'] ?? '';
+  String city = address['city'] ?? address['town'] ?? address['village'] ?? '';
+  String district = address['county'] ?? '';
+  String province = address['state'] ?? '';
+  String country = address['country'] ?? '';
+  String postalCode = address['postcode'] ?? '';
   String latitude = location.latitude.toString();
   String longitude = location.longitude.toString();
-  String cityType = data['address']['type'] ?? 'Unknown city type';
+  String cityType = address['type'] ?? '';
   String street = road;
-  String wardNo = data['address']['neighbourhood'] ?? 'Unknown ward';
-  String tole = data['address']['suburb'] ?? 'Unknown suburb';
+  String wardNo = address['neighbourhood'] ?? '';
+  String tole = address['suburb'] ?? '';
 
   return {
     'Street': street,
