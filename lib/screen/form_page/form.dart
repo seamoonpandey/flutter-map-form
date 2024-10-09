@@ -1,14 +1,49 @@
-import 'package:address_form/models/address.dart';
-import 'package:address_form/utils/functions/print_address.dart';
 import 'package:flutter/material.dart';
 
 class AddressForm extends StatefulWidget {
   final void Function() openMap;
   final Map<String, String> geocodeData;
+
+  // Controllers for each form field
+  final TextEditingController addressTitleController;
+  final TextEditingController cityController;
+  final TextEditingController cityTypeController;
+  final TextEditingController countryController;
+  final TextEditingController districtController;
+  final TextEditingController emailController;
+  final TextEditingController fullNameController;
+  final TextEditingController latitudeController;
+  final TextEditingController longitudeController;
+  final TextEditingController phoneNoController;
+  final TextEditingController provinceController;
+  final TextEditingController streetController;
+  final TextEditingController toleController;
+  final TextEditingController wardNoController;
+
+  final void Function() onSubmit;
+
+  final GlobalKey<FormState>? formKey;
+
   const AddressForm({
+    super.key,
+    required this.onSubmit,
     required this.openMap,
     required this.geocodeData,
-    super.key,
+    required this.addressTitleController,
+    required this.cityController,
+    required this.cityTypeController,
+    required this.countryController,
+    required this.districtController,
+    required this.emailController,
+    required this.fullNameController,
+    required this.latitudeController,
+    required this.longitudeController,
+    required this.phoneNoController,
+    required this.provinceController,
+    required this.streetController,
+    required this.toleController,
+    required this.wardNoController,
+    required this.formKey,
   });
 
   @override
@@ -16,35 +51,16 @@ class AddressForm extends StatefulWidget {
 }
 
 class AddressFormState extends State<AddressForm> {
-  final _formKey = GlobalKey<FormState>();
-
-  // Controllers for each form field
-  final TextEditingController _addressTitleController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _cityTypeController = TextEditingController();
-  final TextEditingController _countryController = TextEditingController();
-  final TextEditingController _districtController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _latitudeController = TextEditingController();
-  final TextEditingController _longitudeController = TextEditingController();
-  final TextEditingController _phoneNoController = TextEditingController();
-  final TextEditingController _provinceController = TextEditingController();
-  final TextEditingController _streetController = TextEditingController();
-  final TextEditingController _toleController = TextEditingController();
-  final TextEditingController _wardNoController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
 
-    // Autofill form fields using geocode data
     if (widget.geocodeData.isNotEmpty) {
-      _cityController.text = widget.geocodeData['city'] ?? '';
-      _countryController.text = widget.geocodeData['country'] ?? '';
-      _streetController.text = widget.geocodeData['street'] ?? '';
-      _latitudeController.text = widget.geocodeData['latitude'] ?? '';
-      _longitudeController.text = widget.geocodeData['longitude'] ?? '';
+      widget.cityController.text = widget.geocodeData['city'] ?? '';
+      widget.countryController.text = widget.geocodeData['country'] ?? '';
+      widget.streetController.text = widget.geocodeData['street'] ?? '';
+      widget.latitudeController.text = widget.geocodeData['latitude'] ?? '';
+      widget.longitudeController.text = widget.geocodeData['longitude'] ?? '';
     }
   }
 
@@ -53,25 +69,23 @@ class AddressFormState extends State<AddressForm> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
-        key: _formKey,
+        key: widget.formKey,
         child: ListView(
           children: <Widget>[
-            _buildTextField(_addressTitleController, 'Address Title'),
-            _buildTextField(_cityController, 'City'),
-            _buildTextField(_cityTypeController, 'City Type'),
-            _buildTextField(_countryController, 'Country'),
-            _buildTextField(_districtController, 'District'),
-            _buildTextField(_emailController, 'Email',
+            _buildTextField(widget.addressTitleController, 'Address Title'),
+            _buildTextField(widget.cityController, 'City'),
+            _buildTextField(widget.cityTypeController, 'City Type'),
+            _buildTextField(widget.countryController, 'Country'),
+            _buildTextField(widget.districtController, 'District'),
+            _buildTextField(widget.emailController, 'Email',
                 keyboardType: TextInputType.emailAddress),
-            _buildTextField(_fullNameController, 'Full Name'),
-            _buildTextField(_latitudeController, 'Latitude'),
-            _buildTextField(_longitudeController, 'Longitude'),
-            _buildTextField(_phoneNoController, 'Phone No',
+            _buildTextField(widget.fullNameController, 'Full Name'),
+            _buildTextField(widget.phoneNoController, 'Phone No',
                 keyboardType: TextInputType.phone),
-            _buildTextField(_provinceController, 'Province'),
-            _buildTextField(_streetController, 'Street'),
-            _buildTextField(_toleController, 'Tole'),
-            _buildTextField(_wardNoController, 'Ward No'),
+            _buildTextField(widget.provinceController, 'Province'),
+            _buildTextField(widget.streetController, 'Street'),
+            _buildTextField(widget.toleController, 'Tole'),
+            _buildTextField(widget.wardNoController, 'Ward No'),
             const SizedBox(height: 20),
             TextButton(
               onPressed: widget.openMap,
@@ -81,29 +95,7 @@ class AddressFormState extends State<AddressForm> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  debugPrint('Form is valid');
-                  printAddress(Address(
-                    addressTitle: _addressTitleController.text,
-                    city: _cityController.text,
-                    cityType: _cityTypeController.text,
-                    country: _countryController.text,
-                    district: _districtController.text,
-                    email: _emailController.text,
-                    fullName: _fullNameController.text,
-                    latitude: _latitudeController.text,
-                    longitude: _longitudeController.text,
-                    phoneNo: _phoneNoController.text,
-                    province: _provinceController.text,
-                    street: _streetController.text,
-                    tole: _toleController.text,
-                    wardNo: _wardNoController.text,
-                    createdAt: DateTime.now(),
-                    updatedAt: DateTime.now(),
-                  ));
-                }
-              },
+              onPressed: widget.onSubmit,
               child: const Text('Submit'),
             ),
           ],
@@ -131,24 +123,5 @@ class AddressFormState extends State<AddressForm> {
         },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _addressTitleController.dispose();
-    _cityController.dispose();
-    _cityTypeController.dispose();
-    _countryController.dispose();
-    _districtController.dispose();
-    _emailController.dispose();
-    _fullNameController.dispose();
-    _latitudeController.dispose();
-    _longitudeController.dispose();
-    _phoneNoController.dispose();
-    _provinceController.dispose();
-    _streetController.dispose();
-    _toleController.dispose();
-    _wardNoController.dispose();
-    super.dispose();
   }
 }

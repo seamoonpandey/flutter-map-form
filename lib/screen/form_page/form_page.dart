@@ -12,7 +12,23 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Map<String, String> geocodeData = {};
+
+  final TextEditingController _addressTitleController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _cityTypeController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _districtController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
+  final TextEditingController _phoneNoController = TextEditingController();
+  final TextEditingController _provinceController = TextEditingController();
+  final TextEditingController _streetController = TextEditingController();
+  final TextEditingController _toleController = TextEditingController();
+  final TextEditingController _wardNoController = TextEditingController();
 
   _showMap() {
     showModalBottomSheet<void>(
@@ -38,7 +54,34 @@ class _FormPageState extends State<FormPage> {
               Map<String, String> data = await decodeGeocode(location);
 
               debugPrint('Geocode data: $data');
-              Navigator.of(context).pop();
+
+              setState(() {
+                // Ensure geocode data is properly assigned.
+                geocodeData = data;
+
+                _latitudeController.text = location.latitude.toString();
+                _longitudeController.text = location.longitude.toString();
+                _streetController.text =
+                    geocodeData['Street'] ?? _streetController.text;
+                _toleController.text =
+                    geocodeData['Tole'] ?? _toleController.text;
+                _cityController.text =
+                    geocodeData['City'] ?? _cityController.text;
+                _districtController.text =
+                    geocodeData['District'] ?? _districtController.text;
+                _provinceController.text =
+                    geocodeData['Province'] ?? _provinceController.text;
+                _countryController.text =
+                    geocodeData['Country'] ?? _countryController.text;
+                _wardNoController.text =
+                    geocodeData['Ward No'] ?? _wardNoController.text;
+                _cityTypeController.text =
+                    geocodeData['City Type'] ?? _cityTypeController.text;
+              });
+
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
             },
           ),
         );
@@ -63,6 +106,26 @@ class _FormPageState extends State<FormPage> {
           child: AddressForm(
             openMap: _showMap,
             geocodeData: geocodeData,
+            addressTitleController: _addressTitleController,
+            cityController: _cityController,
+            cityTypeController: _cityTypeController,
+            countryController: _countryController,
+            districtController: _districtController,
+            emailController: _emailController,
+            fullNameController: _fullNameController,
+            latitudeController: _latitudeController,
+            longitudeController: _longitudeController,
+            phoneNoController: _phoneNoController,
+            provinceController: _provinceController,
+            streetController: _streetController,
+            toleController: _toleController,
+            wardNoController: _wardNoController,
+            formKey: _formKey,
+            onSubmit: () {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+              }
+            },
           ),
         );
       },
