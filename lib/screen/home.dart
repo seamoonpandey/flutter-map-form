@@ -1,4 +1,4 @@
-import 'package:address_form/components/form.dart';
+import 'package:address_form/screen/form_page/form.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
