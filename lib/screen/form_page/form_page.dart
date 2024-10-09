@@ -35,16 +35,10 @@ class _FormPageState extends State<FormPage> {
               setState(() {});
             },
             onLocationConfirmed: (LatLng location) async {
-              final geocodeData =
-                  await decodeGeocode(location).then((data) => mapGeocodeData(
-                        data,
-                        location,
-                      ));
-              setState(() {
-                this.geocodeData = geocodeData;
-              });
-              debugPrint('Geocode data: $geocodeData');
-              Navigator.pop(context);
+              Map<String, String> data = await decodeGeocode(location);
+
+              debugPrint('Geocode data: $data');
+              Navigator.of(context).pop();
             },
           ),
         );

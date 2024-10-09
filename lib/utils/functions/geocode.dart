@@ -12,7 +12,8 @@ Future<Map<String, String>> decodeGeocode(LatLng location) async {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return mapGeocodeData(data, location);
+
+      return mapGeocodeData(location, data);
     } else {
       debugPrint('Failed to get address. Status code: ${response.statusCode}');
       return {};
@@ -23,8 +24,8 @@ Future<Map<String, String>> decodeGeocode(LatLng location) async {
   }
 }
 
-Map<String, String> mapGeocodeData(Map<String, dynamic> data, LatLng location) {
-  String road = data['address']['road'] ?? 'Unknown road';
+Map<String, String> mapGeocodeData(LatLng location, Map<String, dynamic> data) {
+  String road = data['address']['road'] ?? '';
   String city = data['address']['city'] ??
       data['address']['town'] ??
       data['address']['village'] ??

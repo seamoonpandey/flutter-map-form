@@ -186,15 +186,8 @@ class _MoonMapState extends State<MoonMap> {
               ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content:
-                          Text('Location confirmed: ($latitude, $longitude)'),
-                      duration: const Duration(seconds: 3),
-                    ),
-                  );
-                },
+                onPressed: () =>
+                    widget.onLocationConfirmed(LatLng(latitude, longitude)),
                 child: const Text('Confirm Location'),
               ),
             ],
