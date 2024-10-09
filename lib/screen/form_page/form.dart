@@ -3,7 +3,11 @@ import 'package:address_form/utils/functions/print_address.dart';
 import 'package:flutter/material.dart';
 
 class AddressForm extends StatefulWidget {
-  const AddressForm({super.key});
+  final void Function() openMap;
+  const AddressForm({
+    required this.openMap,
+    super.key,
+  });
 
   @override
   AddressFormState createState() => AddressFormState();
@@ -52,6 +56,13 @@ class AddressFormState extends State<AddressForm> {
             _buildTextField(_streetController, 'Street'),
             _buildTextField(_toleController, 'Tole'),
             _buildTextField(_wardNoController, 'Ward No'),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: widget.openMap,
+              child: const Text(
+                "Set on map",
+              ),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
