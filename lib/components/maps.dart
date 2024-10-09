@@ -108,22 +108,37 @@ class _MoonMapState extends State<MoonMap> {
           ],
         ),
         Positioned(
-          bottom: 20.0,
-          right: 20.0,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FloatingActionButton(
-                onPressed: _getCurrentLocation,
-                child: const Icon(Icons.my_location),
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () =>
-                    widget.onLocationConfirmed(LatLng(latitude, longitude)),
-                child: const Text('Confirm Location'),
-              ),
-            ],
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: FloatingActionButton(
+                    onPressed: () =>
+                        widget.onLocationConfirmed(LatLng(latitude, longitude)),
+                    child: const FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'Confirm location pin',
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                FloatingActionButton(
+                  onPressed: _getCurrentLocation,
+                  child: const Icon(Icons.my_location),
+                ),
+              ],
+            ),
           ),
         ),
       ],
