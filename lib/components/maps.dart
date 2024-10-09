@@ -140,42 +140,40 @@ class _MoonMapState extends State<MoonMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          FlutterMap(
-            mapController: _mapController,
-            options: _mapOptions,
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    width: 80.0,
-                    height: 80.0,
-                    point: LatLng(latitude, longitude),
-                    child: const Icon(
-                      Icons.location_on,
-                      size: 48.0,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 20.0,
-            right: 20.0,
-            child: FloatingActionButton(
-              onPressed: _getCurrentLocation,
-              child: const Icon(Icons.my_location),
+    return Stack(
+      children: [
+        FlutterMap(
+          mapController: _mapController,
+          options: _mapOptions,
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             ),
+            MarkerLayer(
+              markers: [
+                Marker(
+                  width: 80.0,
+                  height: 80.0,
+                  point: LatLng(latitude, longitude),
+                  child: const Icon(
+                    Icons.location_on,
+                    size: 48.0,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        Positioned(
+          bottom: 20.0,
+          right: 20.0,
+          child: FloatingActionButton(
+            onPressed: _getCurrentLocation,
+            child: const Icon(Icons.my_location),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
