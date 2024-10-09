@@ -72,6 +72,7 @@ class AddressFormState extends State<AddressForm> {
     required Icon prefixIcon,
     String? hintText,
     int maxLines = 1,
+    required String? Function(String?) validator,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
@@ -86,6 +87,7 @@ class AddressFormState extends State<AddressForm> {
           label: Text(labelText),
         ),
         maxLines: maxLines,
+        validator: validator,
       ),
     );
   }
@@ -99,6 +101,8 @@ class AddressFormState extends State<AddressForm> {
     required Icon icon2,
     String? hintText1,
     String? hintText2,
+    required String? Function(String?) validator1,
+    required String? Function(String?) validator2,
   }) {
     return Row(
       children: [
@@ -108,6 +112,7 @@ class AddressFormState extends State<AddressForm> {
             labelText: label1,
             prefixIcon: icon1,
             hintText: hintText1,
+            validator: validator1,
           ),
         ),
         const SizedBox(width: 8),
@@ -117,10 +122,39 @@ class AddressFormState extends State<AddressForm> {
             labelText: label2,
             prefixIcon: icon2,
             hintText: hintText2,
+            validator: validator2,
           ),
         ),
       ],
     );
+  }
+
+  String? requiredFieldValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field is required';
+    }
+    return null;
+  }
+
+  String? emailValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(value)) {
+      return 'Enter a valid email';
+    }
+    return null;
+  }
+
+  String? phoneValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Phone number is required';
+    }
+    if (value.length != 10) {
+      return 'Phone number must be 10 digits';
+    }
+    return null;
   }
 
   @override
@@ -142,29 +176,41 @@ class AddressFormState extends State<AddressForm> {
               labelText: 'Address Title',
               prefixIcon: const Icon(Icons.list_alt_outlined),
               hintText: 'Home, Office, etc.',
+              validator: requiredFieldValidator,
             ),
             buildTextFormField(
               controller: widget.fullNameController,
               labelText: 'Name',
               prefixIcon: const Icon(Iconsax.user),
+              validator: requiredFieldValidator,
             ),
             buildTextFormField(
               controller: widget.emailController,
               labelText: 'Email',
               prefixIcon: const Icon(FontAwesomeIcons.envelope),
               hintText: 'yourmail@example.com',
+              validator: emailValidator,
             ),
             buildTextFormField(
               controller: widget.phoneNoController,
               labelText: 'Phone Number',
               prefixIcon: const Icon(Iconsax.mobile),
               hintText: '98********',
+              validator: phoneValidator,
+            ),
+            buildTextFormField(
+              controller: widget.countryController,
+              labelText: 'Country',
+              prefixIcon: const Icon(Iconsax.global),
+              hintText: 'Nepal',
+              validator: requiredFieldValidator,
             ),
             buildTextFormField(
               controller: widget.provinceController,
               labelText: 'Province',
               prefixIcon: const Icon(Iconsax.location),
-              hintText: 'Lumbini Province',
+              hintText: 'Province No',
+              validator: requiredFieldValidator,
             ),
             buildTwoTextFormFieldRow(
               controller1: widget.districtController,
@@ -173,8 +219,10 @@ class AddressFormState extends State<AddressForm> {
               controller2: widget.streetController,
               label2: 'Street',
               icon2: const Icon(FontAwesomeIcons.road),
-              hintText1: 'Rupandehi',
+              hintText1: 'eg: Rupandehi',
               hintText2: 'eg: Sainik Marga',
+              validator1: requiredFieldValidator,
+              validator2: requiredFieldValidator,
             ),
             buildTwoTextFormFieldRow(
               controller1: widget.wardNoController,
@@ -185,12 +233,8 @@ class AddressFormState extends State<AddressForm> {
               icon2: const Icon(Icons.map),
               hintText1: 'Ward No',
               hintText2: 'eg: Namuna Tole',
-            ),
-            buildTextFormField(
-              controller: widget.countryController,
-              labelText: 'Country',
-              prefixIcon: const Icon(Iconsax.global),
-              hintText: 'Nepal',
+              validator1: requiredFieldValidator,
+              validator2: requiredFieldValidator,
             ),
             OutlinedButton(
               onPressed: widget.openMap,
@@ -210,7 +254,11 @@ class AddressFormState extends State<AddressForm> {
             ),
             const SizedBox(height: 14),
             ElevatedButton(
-              onPressed: widget.onSubmit,
+              onPressed: () {
+                if (widget.formKey!.currentState!.validate()) {
+                  widget.onSubmit();
+                }
+              },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50),
                 shape: const RoundedRectangleBorder(
