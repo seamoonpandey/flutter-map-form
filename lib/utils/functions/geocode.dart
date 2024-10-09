@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
@@ -29,21 +30,21 @@ void decodeGeocode(LatLng location) async {
       String wardNo = data['address']['neighbourhood'] ?? 'Unknown ward';
       String tole = data['address']['suburb'] ?? 'Unknown suburb';
 
-      print('Street: $street');
-      print('Tole: $tole');
-      print('City: $city');
-      print('District: $district');
-      print('Province: $province');
-      print('Country: $country');
-      print('Postal Code: $postalCode');
-      print('Ward No: $wardNo');
-      print('City Type: $cityType');
-      print('Latitude: $latitude');
-      print('Longitude: $longitude');
+      debugPrint('Street: $street');
+      debugPrint('Tole: $tole');
+      debugPrint('City: $city');
+      debugPrint('District: $district');
+      debugPrint('Province: $province');
+      debugPrint('Country: $country');
+      debugPrint('Postal Code: $postalCode');
+      debugPrint('Ward No: $wardNo');
+      debugPrint('City Type: $cityType');
+      debugPrint('Latitude: $latitude');
+      debugPrint('Longitude: $longitude');
     } else {
-      print('Failed to get address. Status code: ${response.statusCode}');
+      debugPrint('Failed to get address. Status code: ${response.statusCode}');
     }
   } catch (e) {
-    print('Error occurred: $e');
+    debugPrint('Error occurred: $e');
   }
 }
