@@ -30,61 +30,56 @@ class AddressFormState extends State<AddressForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Address Form'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              _buildTextField(_addressTitleController, 'Address Title'),
-              _buildTextField(_cityController, 'City'),
-              _buildTextField(_cityTypeController, 'City Type'),
-              _buildTextField(_countryController, 'Country'),
-              _buildTextField(_districtController, 'District'),
-              _buildTextField(_emailController, 'Email',
-                  keyboardType: TextInputType.emailAddress),
-              _buildTextField(_fullNameController, 'Full Name'),
-              _buildTextField(_latitudeController, 'Latitude'),
-              _buildTextField(_longitudeController, 'Longitude'),
-              _buildTextField(_phoneNoController, 'Phone No',
-                  keyboardType: TextInputType.phone),
-              _buildTextField(_provinceController, 'Province'),
-              _buildTextField(_streetController, 'Street'),
-              _buildTextField(_toleController, 'Tole'),
-              _buildTextField(_wardNoController, 'Ward No'),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    debugPrint('Form is valid');
-                    printAddress(Address(
-                      addressTitle: _addressTitleController.text,
-                      city: _cityController.text,
-                      cityType: _cityTypeController.text,
-                      country: _countryController.text,
-                      district: _districtController.text,
-                      email: _emailController.text,
-                      fullName: _fullNameController.text,
-                      latitude: _latitudeController.text,
-                      longitude: _longitudeController.text,
-                      phoneNo: _phoneNoController.text,
-                      province: _provinceController.text,
-                      street: _streetController.text,
-                      tole: _toleController.text,
-                      wardNo: _wardNoController.text,
-                      createdAt: DateTime.now(),
-                      updatedAt: DateTime.now(),
-                    ));
-                  }
-                },
-                child: const Text('Submit'),
-              ),
-            ],
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: _formKey,
+        child: ListView(
+          children: <Widget>[
+            _buildTextField(_addressTitleController, 'Address Title'),
+            _buildTextField(_cityController, 'City'),
+            _buildTextField(_cityTypeController, 'City Type'),
+            _buildTextField(_countryController, 'Country'),
+            _buildTextField(_districtController, 'District'),
+            _buildTextField(_emailController, 'Email',
+                keyboardType: TextInputType.emailAddress),
+            _buildTextField(_fullNameController, 'Full Name'),
+            _buildTextField(_latitudeController, 'Latitude'),
+            _buildTextField(_longitudeController, 'Longitude'),
+            _buildTextField(_phoneNoController, 'Phone No',
+                keyboardType: TextInputType.phone),
+            _buildTextField(_provinceController, 'Province'),
+            _buildTextField(_streetController, 'Street'),
+            _buildTextField(_toleController, 'Tole'),
+            _buildTextField(_wardNoController, 'Ward No'),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  debugPrint('Form is valid');
+                  printAddress(Address(
+                    addressTitle: _addressTitleController.text,
+                    city: _cityController.text,
+                    cityType: _cityTypeController.text,
+                    country: _countryController.text,
+                    district: _districtController.text,
+                    email: _emailController.text,
+                    fullName: _fullNameController.text,
+                    latitude: _latitudeController.text,
+                    longitude: _longitudeController.text,
+                    phoneNo: _phoneNoController.text,
+                    province: _provinceController.text,
+                    street: _streetController.text,
+                    tole: _toleController.text,
+                    wardNo: _wardNoController.text,
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                  ));
+                }
+              },
+              child: const Text('Submit'),
+            ),
+          ],
         ),
       ),
     );
