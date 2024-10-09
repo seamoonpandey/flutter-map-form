@@ -1,4 +1,4 @@
-import 'package:address_form/screen/form_page/form_page.dart';
+import 'package:address_form/screen/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const FormPage(),
+      home: const HomeScreen(),
     );
   }
 }

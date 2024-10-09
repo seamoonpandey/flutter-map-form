@@ -1,4 +1,4 @@
-// import 'package:address_form/screen/form_page/form.dart';
+import 'package:address_form/screen/form_page/form_page.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,12 +20,12 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             debugPrint("Add address button pressed");
 
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => const AddressForm(),
-            //   ),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FormPage(),
+              ),
+            );
           },
           child: const Text("Add address"),
         ),
