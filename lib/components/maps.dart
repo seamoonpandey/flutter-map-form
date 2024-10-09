@@ -43,7 +43,8 @@ class _MoonMapState extends State<MoonMap> {
     // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      _showLocationServicesDialog();
+      return;
     }
 
     // Check for location permissions
@@ -51,72 +52,130 @@ class _MoonMapState extends State<MoonMap> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        _showError('Location permissions are denied.');
+        return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are permanently denied
-      return Future.error('Location permissions are permanently denied');
+      _showError('Location permissions are permanently denied.');
+      return;
     }
 
     // Fetch the current location
-    Position position = await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.best,
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+        ),
+      );
+
+      setState(() {
+        longitude = position.longitude;
+        latitude = position.latitude;
+      });
+
+      // Move the map to the current location
+      _mapController.move(LatLng(latitude, longitude), 13.0);
+    } catch (e) {
+      _showError('Failed to get current location.');
+    }
+  }
+
+  // Method to show dialog asking user to enable location services
+  void _showLocationServicesDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Location Services Disabled'),
+        content: const Text('Please enable location services to use the map.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Geolocator.openLocationSettings(); // Open location settings
+            },
+            child: const Text('Open Settings'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+        ],
       ),
     );
+  }
 
-    setState(() {
-      longitude = position.longitude;
-      latitude = position.latitude;
-    });
+  void _getCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+        ),
+      );
 
-    // Move the map to the current location
-    _mapController.move(LatLng(latitude, longitude), 13.0);
+      setState(() {
+        longitude = position.longitude;
+        latitude = position.latitude;
+      });
+
+      _goToCurrentLocation();
+    } catch (e) {
+      _showError('Failed to get current location.');
+    }
   }
 
   void _goToCurrentLocation() {
     _mapController.move(LatLng(latitude, longitude), 13.0);
   }
 
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        FlutterMap(
-          mapController: _mapController,
-          options: _mapOptions,
-          children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-            ),
-            MarkerLayer(
-              markers: [
-                Marker(
-                  width: 80.0,
-                  height: 80.0,
-                  point: LatLng(latitude, longitude),
-                  child: const Icon(
-                    Icons.location_on,
-                    size: 48.0,
-                    color: Colors.red,
+    return Scaffold(
+      body: Stack(
+        children: [
+          FlutterMap(
+            mapController: _mapController,
+            options: _mapOptions,
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: LatLng(latitude, longitude),
+                    child: const Icon(
+                      Icons.location_on,
+                      size: 48.0,
+                      color: Colors.red,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        Positioned(
-          bottom: 20.0,
-          right: 20.0,
-          child: FloatingActionButton(
-            onPressed: _goToCurrentLocation,
-            child: const Icon(Icons.my_location),
+                ],
+              ),
+            ],
           ),
-        ),
-      ],
+          Positioned(
+            bottom: 20.0,
+            right: 20.0,
+            child: FloatingActionButton(
+              onPressed: _getCurrentLocation,
+              child: const Icon(Icons.my_location),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
