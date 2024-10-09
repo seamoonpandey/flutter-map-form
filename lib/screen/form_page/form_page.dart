@@ -1,6 +1,8 @@
 import 'package:address_form/components/maps.dart';
 import 'package:address_form/screen/form_page/form.dart';
+import 'package:address_form/utils/functions/geocode.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 
 class FormPage extends StatefulWidget {
   const FormPage({super.key});
@@ -17,8 +19,13 @@ class _FormPageState extends State<FormPage> {
           return Container(
             margin:
                 EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
-            child: const Dialog.fullscreen(
-              child: MoonMap(),
+            child: Dialog.fullscreen(
+              child: MoonMap(
+                onLocationChanged: (LatLng location) {
+                  debugPrint('Location: $location');
+                  decodeGeocode(location);
+                },
+              ),
             ),
           );
         });

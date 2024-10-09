@@ -4,7 +4,11 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MoonMap extends StatefulWidget {
-  const MoonMap({super.key});
+  final ValueChanged<LatLng> onLocationChanged;
+  const MoonMap({
+    required this.onLocationChanged,
+    super.key,
+  });
 
   @override
   State<MoonMap> createState() => _MoonMapState();
@@ -30,6 +34,7 @@ class _MoonMapState extends State<MoonMap> {
         setState(() {
           latitude = point.latitude;
           longitude = point.longitude;
+          widget.onLocationChanged(LatLng(latitude, longitude));
         });
       },
     );
@@ -73,6 +78,7 @@ class _MoonMapState extends State<MoonMap> {
       setState(() {
         longitude = position.longitude;
         latitude = position.latitude;
+        widget.onLocationChanged(LatLng(latitude, longitude));
       });
 
       // Move the map to the current location
@@ -93,7 +99,7 @@ class _MoonMapState extends State<MoonMap> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              Geolocator.openLocationSettings(); // Open location settings
+              Geolocator.openLocationSettings();
             },
             child: const Text('Open Settings'),
           ),
@@ -117,6 +123,7 @@ class _MoonMapState extends State<MoonMap> {
       setState(() {
         longitude = position.longitude;
         latitude = position.latitude;
+        widget.onLocationChanged(LatLng(latitude, longitude));
       });
 
       _goToCurrentLocation();

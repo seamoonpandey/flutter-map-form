@@ -1,4 +1,4 @@
-import 'package:address_form/components/maps.dart';
+// import 'package:address_form/components/maps.dart';
 import 'package:flutter/material.dart';
 
 class MapPage extends StatefulWidget {
@@ -15,7 +15,7 @@ class _MapPageState extends State<MapPage> {
       appBar: AppBar(
         title: const Text('Select your location'),
       ),
-      body: const MoonMap(),
+      body: const Placeholder(),
     );
   }
 }
