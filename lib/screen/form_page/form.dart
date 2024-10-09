@@ -129,8 +129,8 @@ class AddressFormState extends State<AddressForm> {
       padding: const EdgeInsets.all(16.0),
       child: Form(
         key: widget.formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          shrinkWrap: true,
           children: [
             const Text(
               'Add new address',
@@ -160,15 +160,11 @@ class AddressFormState extends State<AddressForm> {
               prefixIcon: const Icon(Iconsax.mobile),
               hintText: '98********',
             ),
-            buildTwoTextFormFieldRow(
-              controller1: widget.countryController,
-              label1: 'Country',
-              icon1: const Icon(Iconsax.global),
-              controller2: widget.provinceController,
-              label2: 'Province',
-              icon2: const Icon(Iconsax.location),
-              hintText1: 'Nepal',
-              hintText2: 'eg: Lumbini Province',
+            buildTextFormField(
+              controller: widget.provinceController,
+              labelText: 'Province',
+              prefixIcon: const Icon(Iconsax.location),
+              hintText: 'Lumbini Province',
             ),
             buildTwoTextFormFieldRow(
               controller1: widget.districtController,
@@ -189,6 +185,12 @@ class AddressFormState extends State<AddressForm> {
               icon2: const Icon(Icons.map),
               hintText1: 'Ward No',
               hintText2: 'eg: Namuna Tole',
+            ),
+            buildTextFormField(
+              controller: widget.countryController,
+              labelText: 'Country',
+              prefixIcon: const Icon(Iconsax.global),
+              hintText: 'Nepal',
             ),
             OutlinedButton(
               onPressed: widget.openMap,
