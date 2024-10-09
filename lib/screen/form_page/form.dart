@@ -66,6 +66,63 @@ class AddressFormState extends State<AddressForm> {
     }
   }
 
+  Widget buildTextFormField({
+    required TextEditingController controller,
+    required String labelText,
+    required Icon prefixIcon,
+    String? hintText,
+    int maxLines = 1,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          prefixIcon: prefixIcon,
+          hintText: hintText,
+          hintStyle: const TextStyle(
+              color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w400),
+          label: Text(labelText),
+        ),
+        maxLines: maxLines,
+      ),
+    );
+  }
+
+  Widget buildTwoTextFormFieldRow({
+    required TextEditingController controller1,
+    required String label1,
+    required Icon icon1,
+    required TextEditingController controller2,
+    required String label2,
+    required Icon icon2,
+    String? hintText1,
+    String? hintText2,
+  }) {
+    return Row(
+      children: [
+        Expanded(
+          child: buildTextFormField(
+            controller: controller1,
+            labelText: label1,
+            prefixIcon: icon1,
+            hintText: hintText1,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: buildTextFormField(
+            controller: controller2,
+            labelText: label2,
+            prefixIcon: icon2,
+            hintText: hintText2,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -77,239 +134,85 @@ class AddressFormState extends State<AddressForm> {
           children: [
             const Text(
               'Add new address',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(
-              height: 14,
-            ),
-            TextFormField(
+            const SizedBox(height: 14),
+            buildTextFormField(
               controller: widget.addressTitleController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(
-                  Icons.list_alt_outlined,
-                ),
-                hintText: 'Home, Office, etc.',
-                hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400),
-                label: Text('Address Title'),
-              ),
+              labelText: 'Address Title',
+              prefixIcon: const Icon(Icons.list_alt_outlined),
+              hintText: 'Home, Office, etc.',
             ),
-            const SizedBox(
-              height: 14,
-            ),
-            TextFormField(
+            buildTextFormField(
               controller: widget.fullNameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(
-                  Iconsax.user,
-                ),
-                label: Text('Name'),
-              ),
+              labelText: 'Name',
+              prefixIcon: const Icon(Iconsax.user),
             ),
-            const SizedBox(
-              height: 14,
-            ),
-            TextFormField(
+            buildTextFormField(
               controller: widget.emailController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(
-                  FontAwesomeIcons.envelope,
-                ),
-                hintText: 'yourmail@example.com',
-                hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400),
-                label: Text('Email'),
-              ),
+              labelText: 'Email',
+              prefixIcon: const Icon(FontAwesomeIcons.envelope),
+              hintText: 'yourmail@example.com',
             ),
-            const SizedBox(
-              height: 14,
-            ),
-            TextFormField(
+            buildTextFormField(
               controller: widget.phoneNoController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(
-                  Iconsax.mobile,
-                ),
-                hintText: '98********',
-                hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400),
-                label: Text('Phone Number'),
-              ),
+              labelText: 'Phone Number',
+              prefixIcon: const Icon(Iconsax.mobile),
+              hintText: '98********',
             ),
-            const SizedBox(
-              height: 14,
+            buildTwoTextFormFieldRow(
+              controller1: widget.countryController,
+              label1: 'Country',
+              icon1: const Icon(Iconsax.global),
+              controller2: widget.provinceController,
+              label2: 'Province',
+              icon2: const Icon(Iconsax.location),
+              hintText1: 'Nepal',
+              hintText2: 'eg: Lumbini Province',
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: widget.countryController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(
-                        Iconsax.global,
-                      ),
-                      hintText: 'Nepal',
-                      hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                      label: Text('Country'),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: widget.provinceController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(
-                        Iconsax.location,
-                      ),
-                      hintText: 'eg: Lumbini Province',
-                      hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                      label: Text('Province'),
-                    ),
-                  ),
-                ),
-              ],
+            buildTwoTextFormFieldRow(
+              controller1: widget.districtController,
+              label1: 'District',
+              icon1: const Icon(Iconsax.location),
+              controller2: widget.streetController,
+              label2: 'Street',
+              icon2: const Icon(FontAwesomeIcons.road),
+              hintText1: 'Rupandehi',
+              hintText2: 'eg: Sainik Marga',
             ),
-            const SizedBox(
-              height: 14,
+            buildTwoTextFormFieldRow(
+              controller1: widget.wardNoController,
+              label1: 'Ward',
+              icon1: const Icon(Icons.map),
+              controller2: widget.toleController,
+              label2: 'Tole',
+              icon2: const Icon(Icons.map),
+              hintText1: 'Ward No',
+              hintText2: 'eg: Namuna Tole',
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: widget.districtController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(
-                        Iconsax.location,
-                      ),
-                      hintText: 'Rupandehi',
-                      hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                      label: Text('District'),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: widget.streetController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(
-                        FontAwesomeIcons.road,
-                      ),
-                      hintText: 'eg: sainik marga',
-                      hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                      label: Text('Street'),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 14,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: widget.wardNoController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                      label: Text('Ward'),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: widget.toleController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(
-                        Icons.map,
-                      ),
-                      hintText: 'eg: namuna tole',
-                      hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                      label: Text('Tole'),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 14,
-            ),
-
-            // Button to open map
             OutlinedButton(
               onPressed: widget.openMap,
               style: OutlinedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50), // Full width
+                minimumSize: const Size.fromHeight(50),
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero, // Sharp corners
+                  borderRadius: BorderRadius.zero,
                 ),
               ),
               child: const Row(
                 children: [
                   Text('Set on map'),
                   Spacer(),
-                  Icon(
-                    FontAwesomeIcons.caretRight,
-                    size: 16,
-                  ),
+                  Icon(FontAwesomeIcons.caretRight, size: 16),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 14,
-            ),
+            const SizedBox(height: 14),
             ElevatedButton(
               onPressed: widget.onSubmit,
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50), // Full width
+                minimumSize: const Size.fromHeight(50),
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero, // Sharp corners
+                  borderRadius: BorderRadius.zero,
                 ),
               ),
               child: const Text('Submit'),
