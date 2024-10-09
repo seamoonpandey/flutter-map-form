@@ -41,6 +41,8 @@ dependencies:
   flutter_map_cancellable_tile_provider: ^3.0.2
   geocode: ^1.0.3
   http: ^1.2.2
+  iconsax: ^0.0.8
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   flutter_test:
