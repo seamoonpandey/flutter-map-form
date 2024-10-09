@@ -12,44 +12,63 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
-  // To store geocode data received from the map
   Map<String, String> geocodeData = {};
 
   _showMap() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            margin:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
-            child: Dialog.fullscreen(
-              child: MoonMap(
-                onLocationChanged: (LatLng location) async {
-                  // Fetch geocode data using the location
-                  decodeGeocode(location);
-                  // Close the map after selecting the location
-                  Navigator.of(context).pop();
-                  setState(() {}); // Update the form with new geocode data
-                },
-              ),
-            ),
-          );
-        });
-  }
-
-  _showAddressForm() {
-    showDialog<void>(
+    showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return Container(
           margin: EdgeInsets.only(
             top: MediaQuery.of(context).size.height * 0.1,
           ),
-          child: Dialog.fullscreen(
-            child: AddressForm(
-              openMap: _showMap,
-              geocodeData: geocodeData, // Pass the geocode data to the form
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20),
             ),
+          ),
+          child: MoonMap(
+            onLocationChanged: (LatLng location) async {
+              setState(() {});
+            },
+            onLocationConfirmed: (LatLng location) async {
+              final geocodeData =
+                  await decodeGeocode(location).then((data) => mapGeocodeData(
+                        data,
+                        location,
+                      ));
+              setState(() {
+                this.geocodeData = geocodeData;
+              });
+              debugPrint('Geocode data: $geocodeData');
+              Navigator.pop(context);
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  _showAddressForm() {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Container(
+          margin: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * 0.1,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.zero,
+          ),
+          child: AddressForm(
+            openMap: _showMap,
+            geocodeData: geocodeData,
           ),
         );
       },

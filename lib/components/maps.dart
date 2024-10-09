@@ -5,8 +5,10 @@ import 'package:geolocator/geolocator.dart';
 
 class MoonMap extends StatefulWidget {
   final ValueChanged<LatLng> onLocationChanged;
+  final ValueChanged<LatLng> onLocationConfirmed;
   const MoonMap({
     required this.onLocationChanged,
+    required this.onLocationConfirmed,
     super.key,
   });
 
@@ -175,9 +177,27 @@ class _MoonMapState extends State<MoonMap> {
         Positioned(
           bottom: 20.0,
           right: 20.0,
-          child: FloatingActionButton(
-            onPressed: _getCurrentLocation,
-            child: const Icon(Icons.my_location),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FloatingActionButton(
+                onPressed: _getCurrentLocation,
+                child: const Icon(Icons.my_location),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content:
+                          Text('Location confirmed: ($latitude, $longitude)'),
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                },
+                child: const Text('Confirm Location'),
+              ),
+            ],
           ),
         ),
       ],
